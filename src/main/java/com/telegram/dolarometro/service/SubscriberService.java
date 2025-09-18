@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class SubscriberService {
 
     private static final int MAX_LENGTH = 64;
-    private static final String TRUNCATION_SUFFIX = "…";
+    private static final String TRUNCATION_SUFFIX = "+";
 
     private final SubscriberRepository subscriberRepository;
 
@@ -41,6 +41,7 @@ public class SubscriberService {
         subscriber.setStatus(EStatus.ENABLED);
 
         subscriberRepository.save(subscriber);
+        log.info("Subscriber created successfully: {}", subscriber);
     }
 
     public void pauseSubscriber(Long chatId) {
