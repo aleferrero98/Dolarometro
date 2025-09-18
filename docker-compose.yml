@@ -1,0 +1,64 @@
+services:
+  dolarometro-db:
+    image: mysql:latest
+    container_name: dolarometro-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=dolarometro
+      - MYSQL_USER=dolarometro_bot
+      - MYSQL_PASSWORD=${MYSQL_USER_PASSWORD}
+    volumes:
+      - dolarometro_db_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3301:3306"
+    networks:
+      - dolarometro-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dolarometro-bot:
+    image: ghcr.io/aleferrero98/dolarometro:latest
+    container_name: dolarometro-bot
+    restart: unless-stopped
+    depends_on:
+      dolarometro-db:
+        condition: service_healthy
+    environment:
+      # Telegram config
+      - TELEGRAM_BOT_USERNAME=${TELEGRAM_BOT_USERNAME}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      # Spring config
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      # MySQL config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dolarometro-db:3306/dolarometro?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Argentina/Cordoba
+      - SPRING_DATASOURCE_USERNAME=dolarometro_bot
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_USER_PASSWORD}
+    volumes:
+      - dolarometro_bot_logs:/app/logs
+    ports:
+      - "7777:7777"
+    networks:
+      - dolarometro-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/dolarometro/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  dolarometro_db_data:
+    driver: local
+  dolarometro_bot_logs:
+    driver: local
+
+networks:
+  dolarometro-network:
+    driver: bridge 
