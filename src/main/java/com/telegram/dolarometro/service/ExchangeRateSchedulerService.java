@@ -98,7 +98,10 @@ public class ExchangeRateSchedulerService {
 
     private UsdExchangeRateEntity runUsdExchangeRateTask(EUsdType usdType) {
         UsdExchangeRateEntity usdExchangeRate = this.getUsdExchangeRate(usdType);
-        usdStatisticsService.updateExtremesByUsdType(usdType, usdExchangeRate.getSellRate(), usdExchangeRate.getUpdatedAt());
+
+        if (usdExchangeRate != null) {
+            usdStatisticsService.updateExtremesByUsdType(usdType, usdExchangeRate.getSellRate(), usdExchangeRate.getUpdatedAt());
+        }
 
         return usdExchangeRate;
     }

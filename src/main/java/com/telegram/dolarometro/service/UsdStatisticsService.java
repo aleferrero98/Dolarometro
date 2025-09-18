@@ -28,7 +28,7 @@ public class UsdStatisticsService {
     }
     
     private void updateExtremesForPeriod(EUsdType usdType, EPeriod period, BigDecimal usdExchangeRate, LocalDateTime timestamp) {
-        List<UsdStatisticsEntity> allUsdTypeStats = usdStatisticsRepository.findByUsdType(usdType);
+        List<UsdStatisticsEntity> allUsdTypeStats = usdStatisticsRepository.findByUsdType(usdType.name());
 
         UsdStatisticsEntity statistics = allUsdTypeStats.stream().filter(stat -> period.equals(stat.getPeriod())).findFirst().orElse(null);
         boolean updated = false;

@@ -13,7 +13,7 @@ import com.telegram.dolarometro.model.UsdStatisticsEntity;
 @Repository
 public interface UsdStatisticsRepository extends CrudRepository<UsdStatisticsEntity, Long> {
 
-    @Query(value = "SELECT * FROM usd_statistics WHERE usd_type = :usdType", nativeQuery = true)
-    List<UsdStatisticsEntity> findByUsdType(@Param("usdType") EUsdType usdType);
+    @Query(value = "SELECT * FROM dolarometro.usd_statistics WHERE usd_type = :usdType", nativeQuery = true)
+    List<UsdStatisticsEntity> findByUsdType(@Param("usdType") String usdType);
     
 }
