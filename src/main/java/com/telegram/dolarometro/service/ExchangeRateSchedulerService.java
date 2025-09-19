@@ -42,12 +42,14 @@ public class ExchangeRateSchedulerService {
     // At 30 second every 5 minutes, 10:00-17:59, Monday to Friday
     @Scheduled(cron = "30 */5 10-17 * * MON-FRI")
     public void checkExchangeRatesPrimary() {
+        log.info("Running primary scheduled task at {}", LocalDateTime.now());
         this.checkExchangeRates();
     }
 
     // At 30 second every 5 minutes, 10:00-17:59, Monday to Friday, 1 minute out of sync with the other scheduler
     @Scheduled(cron = "30 1/5 10-17 * * MON-FRI")
     public void checkExchangeRatesSecondary() {
+        log.info("Running secondary scheduled task at {}", LocalDateTime.now());
         this.checkExchangeRates();
     }
 
