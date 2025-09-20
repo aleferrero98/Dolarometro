@@ -22,7 +22,7 @@ services:
       retries: 5
 
   dolarometro-bot:
-    image: ghcr.io/aleferrero98/dolarometro:latest
+    image: ghcr.io/aleferrero98/dolarometro:${IMAGE_TAG:-latest}
     container_name: dolarometro-bot
     restart: unless-stopped
     depends_on:
