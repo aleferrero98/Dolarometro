@@ -11,7 +11,7 @@ GRANT ALL PRIVILEGES ON dolarometro.* TO 'dolarometro_bot'@'%';
 FLUSH PRIVILEGES;
 
 -- Tables
-CREATE TABLE `usd_exchange_rate` (
+CREATE TABLE IF NOT EXISTS `usd_exchange_rate` (
     `usd_exchange_rate_id` int unsigned NOT NULL AUTO_INCREMENT,
     `usd_type` VARCHAR(32) NOT NULL,
     `buy_rate` DECIMAL(20,8) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `usd_exchange_rate` (
     PRIMARY KEY (`usd_exchange_rate_id`)
 );
 
-CREATE TABLE `subscriber` (
+CREATE TABLE IF NOT EXISTS `subscriber` (
     `subscriber_id` int unsigned NOT NULL AUTO_INCREMENT,
     `chat_id` int unsigned NOT NULL UNIQUE,
     `user_name` VARCHAR(64) DEFAULT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `subscriber` (
     PRIMARY KEY (`subscriber_id`)
 );
 
-CREATE TABLE `usd_statistics` (
+CREATE TABLE IF NOT EXISTS `usd_statistics` (
     `usd_statistics_id` int unsigned NOT NULL AUTO_INCREMENT,
     `usd_type` VARCHAR(32) NOT NULL,
     `period` ENUM('DAY','WEEK','MONTH','YEAR') NOT NULL,
