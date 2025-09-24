@@ -7,6 +7,7 @@ TODO
 .env
 .DS_Store
 mysql/data/
+DolarometroBot
 
 ### STS ###
 .apt_generated
